@@ -114,55 +114,7 @@ A FastAPI server is also included for programmatic access to the routing engine.
 
 ---
 
-# 3. System requirements
-
-Recommended:
-
-- Windows 10/11, Linux, or macOS
-- Python 3.11+ recommended
-- 4 GB RAM minimum
-- 8 GB+ RAM recommended for larger experiments
-- Internet connection for the first installation only, to download Python packages
-
-A GPU is **not required** for the normal demo. Training can run on CPU, although longer training experiments will take more time.
-
----
-
-# 4. Get the project
-
-Extract the project ZIP to a folder such as:
-
-```text
-C:\Projects\dynamic-network-routing-rl
-```
-
-or:
-
-```text
-~/projects/dynamic-network-routing-rl
-```
-
-Open a terminal in the extracted project directory.
-
-You should see files similar to:
-
-```text
-README.md
-README_LOCAL_TOOL.md
-requirements.txt
-config.yaml
-app/
-rl/
-routing/
-simulation/
-scripts/
-models/
-tests/
-```
-
----
-
-# 5. Install on Windows
+# 3. Install on Windows
 
 ## Easiest method
 
@@ -214,7 +166,7 @@ python -m streamlit run app\streamlit_app.py
 
 ---
 
-# 6. Install on Linux/macOS
+# 4. Install on Linux/macOS
 
 From the project directory:
 
@@ -242,7 +194,7 @@ python -m streamlit run app/streamlit_app.py
 
 ---
 
-# 7. First use: run the public demo locally
+# 5. First use: run the public demo locally
 
 After starting Streamlit, open the URL it prints.
 
@@ -305,7 +257,7 @@ The dashboard shows:
 
 ---
 
-# 8. Best live demonstration
+# 6. Best live demonstration
 
 The most useful demonstration is to show that the route changes when the network becomes unhealthy.
 
@@ -362,86 +314,7 @@ Traffic is routed through another path
 
 ---
 
-# 9. Understand the dashboard
-
-## Live network / topology state
-
-The graph displays the simulated network.
-
-Links can appear healthy, congested, or failed depending on their current state.
-
-The selected route is highlighted.
-
-## Routing outcome
-
-This panel contains:
-
-```text
-Policy
-Route
-Latency
-Packet loss
-Throughput
-Hops
-Delivery status
-```
-
-## Explainable AI
-
-Run the DQN or Safe DQN policy and open the **Explainable AI** tab.
-
-This shows the learned action values and the network conditions considered at each routing decision.
-
-The purpose is to answer:
-
-> Why did the agent choose this next hop?
-
-## Benchmark Lab
-
-Use this tab to compare routing strategies across multiple dynamic scenarios.
-
-The benchmark evaluates:
-
-```text
-Dijkstra
-ECMP
-Random
-DQN
-Safe DQN
-```
-
-Choose the number of runs and click:
-
-```text
-Run full benchmark
-```
-
-You can download the detailed CSV from the dashboard.
-
-## Training Lab
-
-Shows the stored training history when available.
-
-The tool plots:
-
-- smoothed episode reward
-- smoothed learning loss
-
-## Network Telemetry
-
-Shows current edge-level telemetry including:
-
-- latency
-- congestion
-- packet loss
-- availability
-- queue-related conditions
-
-You can also download a JSON snapshot.
-
----
-
-# 10. Use Dijkstra vs DQN vs Safe DQN
+# 7. Use Dijkstra vs DQN vs Safe DQN
 
 The project is designed for comparison rather than assuming RL is automatically better.
 
@@ -469,7 +342,7 @@ A deliberately weak baseline that helps show how much routing quality is gained 
 
 ---
 
-# 11. Retrain the model
+# 8. Retrain the model
 
 A pre-trained checkpoint is included:
 
@@ -529,72 +402,7 @@ More training does not automatically guarantee better results. Use the benchmark
 
 ---
 
-# 12. Run the benchmark from the command line
-
-Activate the virtual environment, then run:
-
-```bash
-python scripts/evaluate.py --runs 200 --topology mesh --nodes 15
-```
-
-The benchmark prints a summary and writes:
-
-```text
-artifacts/benchmark_results.csv
-artifacts/benchmark_summary.csv
-```
-
-For a larger experiment:
-
-```bash
-python scripts/evaluate.py --runs 1000 --topology mesh --nodes 15
-```
-
-The CSV files can be opened in Excel, LibreOffice, pandas, or another analysis tool.
-
----
-
-# 13. Run the experiment workflow
-
-The project also contains:
-
-```text
-scripts/experiment.py
-scripts/run_demo.py
-```
-
-These are useful for repeatable experiments and non-UI demonstrations.
-
-Example:
-
-```bash
-python scripts/run_demo.py
-```
-
----
-
-# 14. Run automated tests
-
-Run:
-
-```bash
-pytest -q
-```
-
-Tests cover the simulator and advanced routing components.
-
-Run the tests whenever you change:
-
-- reward logic
-- topology generation
-- action selection
-- model loading
-- routing behaviour
-- environment transitions
-
----
-
-# 15. Local REST API
+# 9. Local REST API
 
 A FastAPI service is included for applications that want to call the routing engine programmatically.
 
@@ -626,7 +434,7 @@ The interactive Streamlit dashboard is the recommended starting point for normal
 
 ---
 
-# 16. Project structure
+# 10. Project structure
 
 ```text
 dynamic-network-routing-rl/
@@ -676,96 +484,7 @@ dynamic-network-routing-rl/
 
 ---
 
-# 17. Configuration
-
-The main configuration file is:
-
-```text
-config.yaml
-```
-
-Example parameters include:
-
-```yaml
-seed: 7
-topology: mesh
-nodes: 15
-training:
-  episodes: 2400
-  max_steps: 20
-  epsilon_start: 1.0
-  epsilon_end: 0.03
-  epsilon_decay: 0.996
-scenarios:
-  - normal
-  - rush_hour
-  - degraded
-  - failure
-  - storm
-benchmark_runs: 200
-```
-
-You can change the defaults for experiments, but changing topology size or model dimensions may require retraining the checkpoint.
-
----
-
-# 18. Reproducibility
-
-For repeatable experiments:
-
-1. Set a fixed seed.
-2. Keep the topology and node count unchanged.
-3. Keep the model checkpoint name/versioned.
-4. Record the training episode count.
-5. Record benchmark run count.
-6. Save the resulting CSVs.
-
-Example:
-
-```bash
-python scripts/train_model.py --episodes 5000 --seed 123 --topology mesh --nodes 15
-python scripts/evaluate.py --runs 500 --seed 123 --topology mesh --nodes 15
-```
-
----
-
-# 19. How the RL routing works
-
-At each routing decision the agent observes a state containing information about the current routing position and the neighboring links.
-
-Conceptually:
-
-```text
-Current node
-Destination
-Neighbor latency
-Neighbor bandwidth
-Neighbor congestion
-Neighbor packet loss
-Queue conditions
-Link availability
-        ↓
-Neural network
-        ↓
-Q-value for each candidate next hop
-        ↓
-Selected next hop
-```
-
-The reward encourages useful routing behaviour such as:
-
-- reaching the destination
-- lower latency
-- lower congestion
-- lower packet loss
-- avoiding invalid moves
-- avoiding routing loops
-
-The exact reward function is implemented in the simulation environment and should be treated as part of the experiment design.
-
----
-
-# 20. What is "Safety-Shielded DQN"?
+# 11. What is "Safety-Shielded DQN"?
 
 A learned model can make poor decisions, especially when it has not seen a particular network condition during training.
 
@@ -792,204 +511,7 @@ This is an important research direction because practical network automation sho
 
 ---
 
-# 21. How to present this project publicly
-
-A strong 3–5 minute demonstration is:
-
-### 1. Show the normal network
-
-Run Safe DQN and show the initial path.
-
-### 2. Show metrics
-
-Point out:
-
-```text
-Latency
-Packet loss
-Throughput
-Hops
-```
-
-### 3. Inject congestion
-
-Use:
-
-```text
-Inject targeted congestion
-```
-
-### 4. Run routing again
-
-Show that the policy can select a different path.
-
-### 5. Inject a failure
-
-Use:
-
-```text
-Inject link failure
-```
-
-### 6. Compare policies
-
-Open **Benchmark Lab** and compare:
-
-```text
-Dijkstra vs ECMP vs Random vs DQN vs Safe DQN
-```
-
-### 7. Explain the AI decision
-
-Open **Explainable AI** and show why the selected next hop was attractive relative to alternatives.
-
-This demonstrates the entire idea without requiring the audience to read source code.
-
----
-
-# 22. Important interpretation of benchmark results
-
-Do not assume that RL will always beat Dijkstra.
-
-A routing model can perform worse when:
-
-- it has insufficient training
-- the reward is poorly tuned
-- the state representation is incomplete
-- the network distribution changes significantly
-- the baseline is already very strong
-- the model has not seen enough failure/congestion patterns
-
-That is why this project includes benchmark and evaluation tooling.
-
-A credible result is:
-
-```text
-Train
-  ↓
-Evaluate
-  ↓
-Compare with baselines
-  ↓
-Inspect failure cases
-  ↓
-Adjust model/reward/environment
-  ↓
-Retrain
-  ↓
-Evaluate again
-```
-
-This turns the project into an experimental platform rather than a hard-coded demo.
-
----
-
-# 23. Troubleshooting
-
-## Python is not recognized
-
-Install Python and make sure it is available from the terminal.
-
-Windows check:
-
-```powershell
-python --version
-```
-
-Linux/macOS check:
-
-```bash
-python3 --version
-```
-
-## Streamlit command is not found
-
-Activate the virtual environment first:
-
-Windows:
-
-```powershell
-.venv\Scripts\activate
-```
-
-Linux/macOS:
-
-```bash
-source .venv/bin/activate
-```
-
-Then:
-
-```bash
-python -m streamlit run app/streamlit_app.py
-```
-
-## PyTorch installation problem
-
-Upgrade pip and reinstall the requirements:
-
-```bash
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-If your machine has a special CUDA/GPU requirement, consult the official PyTorch installation instructions for your platform rather than changing the model code.
-
-## Model file missing
-
-Train a checkpoint:
-
-```bash
-python scripts/train_model.py --episodes 2400
-```
-
-Then start Streamlit again.
-
-## Tests fail after making code changes
-
-Run:
-
-```bash
-pytest -q
-```
-
-Read the first failing test before changing multiple components at once.
-
-## Port 8501 is already in use
-
-Start Streamlit on another local port:
-
-```bash
-python -m streamlit run app/streamlit_app.py --server.port 8502
-```
-
-Then open:
-
-```text
-http://localhost:8502
-```
-
----
-
-# 24. Security and safety notes
-
-This tool is intended for local experimentation.
-
-It does not automatically:
-
-- modify OS routing tables
-- reconfigure network interfaces
-- inject traffic into external networks
-- control a production router
-- connect to the public internet for packet forwarding
-
-The simulator is intentionally isolated so that routing experiments can be performed safely.
-
-Before connecting the decision layer to real network infrastructure, add authentication, authorization, action validation, rollback controls, rate limits, audit logging, and a controller such as an SDN testbed or network emulator.
-
----
-
-# 25. Recommended learning path
+# 12. Recommended learning path
 
 For someone new to the project:
 
@@ -1017,31 +539,7 @@ For someone new to the project:
 
 ---
 
-# 26. Suggested advanced extensions
-
-The current platform is deliberately structured so it can be extended further.
-
-The next major research-level integrations would be:
-
-- graph neural network routing policies
-- multi-agent reinforcement learning
-- multi-commodity-flow optimization
-- offline RL from historical telemetry
-- distributional RL
-- constrained RL with formal safety budgets
-- curriculum learning for increasingly difficult topologies
-- Mininet integration
-- ns-3 integration
-- Software Defined Networking controller integration
-- real telemetry ingestion through a controlled testbed
-- model versioning and experiment tracking
-- larger-scale distributed training
-
-A real-network integration should be done in a dedicated lab/testbed, not directly against a production network.
-
----
-
-# 27. Quick command reference
+# 13. Quick command reference
 
 ## Windows
 
@@ -1088,23 +586,3 @@ python scripts/train_model.py --episodes 2400
 # Benchmark
 python scripts/evaluate.py --runs 200
 ```
-
----
-
-# 28. Project status
-
-This project is intended as an **advanced simulation/research tool and public demonstration**, not as a production-grade router.
-
-The most important principle is to evaluate the learned policy honestly against strong baselines and under multiple network conditions rather than relying only on training reward.
-
-For the technical design, implementation details, and research discussion, see:
-
-```text
-PROJECT_REPORT.md
-```
-
----
-
-## License / usage
-
-This repository is suitable for local educational, experimental, and demonstration use. Add the license and any organization-specific usage terms before distributing it publicly.
