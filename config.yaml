@@ -1,0 +1,16 @@
+seed: 7
+topology: mesh
+nodes: 15
+training:
+  episodes: 2400
+  max_steps: 20
+  epsilon_start: 1.0
+  epsilon_end: 0.03
+  epsilon_decay: 0.996
+scenarios:
+  - normal
+  - rush_hour
+  - degraded
+  - failure
+  - storm
+benchmark_runs: 200
