@@ -61,3 +61,39 @@ bash start_api_unix.sh
 The service listens on `127.0.0.1:8080`.
 
 `GET /health` checks the service/model. `POST /route` accepts source, destination, scenario, seed and a safe/unsafe policy flag.
+
+
+#!/bin/bash
+
+set -e
+
+echo "=== Project Setup ==="
+
+# Check Python
+python3 --version
+
+# Create virtual environment
+python3 -m venv .venv
+
+# Activate virtual environment
+source .venv/bin/activate
+
+# Upgrade pip
+python -m pip install --upgrade pip
+
+# Install dependencies
+if [ -f requirements.txt ]; then
+    pip install -r requirements.txt
+else
+    echo "requirements.txt not found."
+    exit 1
+fi
+
+echo ""
+echo "Setup complete!"
+echo "Activate the environment with:"
+echo "source .venv/bin/activate"
+
+echo ""
+echo "Start the dashboard with:"
+echo "bash start_unix.sh"
